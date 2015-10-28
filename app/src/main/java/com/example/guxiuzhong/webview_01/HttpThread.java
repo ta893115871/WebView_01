@@ -36,32 +36,34 @@ public class HttpThread extends Thread {
             URL url = new URL(this.mUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
-            connection.setDoOutput(true);
+            connection.connect();
             InputStream inputStream = connection.getInputStream();
             FileOutputStream fos = null;
             File dir;
             File file;
 
-            if (Environment.getExternalStorageState().endsWith(Environment.MEDIA_MOUNTED)) {
-                dir = Environment.getExternalStorageDirectory();
-                file = new File(dir, "test.apk");
-                fos = new FileOutputStream(file);
+            if (connection.getResponseCode() == 200) {
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    dir = Environment.getExternalStorageDirectory();
+                    file = new File(dir, "test.apk");
+                    fos = new FileOutputStream(file);
+                }
+                byte buffer[] = new byte[1024*1024];
+                int len;
+                while ((len = inputStream.read(buffer)) != -1) {
+                    if (fos != null){
+                        fos.write(buffer, 0, len);
+                    }
+                }
+                fos.flush();
+                if (fos != null) {
+                    fos.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                System.out.println("----------down successs---->>>");
             }
-            byte buffer[] = new byte[8192];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                if (fos != null)
-                    fos.write(buffer, 0, len);
-            }
-            if (fos != null) {
-                fos.close();
-
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            System.out.println("----------down successs---->>>");
-
 
         } catch (IOException e) {
             e.printStackTrace();

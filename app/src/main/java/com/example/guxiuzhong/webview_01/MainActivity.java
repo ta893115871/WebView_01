@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        webView.loadUrl("http://www.baidu.com");
-        webView.loadUrl("http://shouji.baidu.com");
+        webView.loadUrl("http://zhushou.360.cn");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                System.out.println("---------------");
+                System.out.println("-----old--onReceivedError--------");
                 //方法1 加载本地错误页面H5
 //                view.loadUrl("file:///android_asset/error.html");
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                System.out.println("---------------");
+                System.out.println("-----new --onReceivedError--------");
                 //方法1 加载本地错误页面H5
 //                view.loadUrl("file:///android_asset/error.html");
 
@@ -115,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("------url>>>" + url);
             if (url.endsWith(".apk")) {
                 //方法1 自己处理webview下载文件
-//                new HttpThread(url).start();
+                new HttpThread(url).start();
 
                 //方法2 使用系统的浏览器下载文件
-                Uri uri = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+//                Uri uri = Uri.parse(url);
+//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                startActivity(intent);
 
             }
         }
